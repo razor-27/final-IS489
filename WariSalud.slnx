@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WariSalud.API/WariSalud.API.csproj" />
+  <Project Path="WariSalud.Core/WariSalud.Core.csproj" />
+  <Project Path="WariSalud.Infrastructure/WariSalud.Infrastructure.csproj" />
+  <Project Path="WariSalud.Tests/WariSalud.Tests.csproj" />
+</Solution>
