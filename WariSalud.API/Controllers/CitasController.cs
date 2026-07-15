@@ -77,7 +77,7 @@ public class CitasController : ControllerBase
         var pacienteId = await ObtenerPacienteIdDelTokenAsync();
         var citas = await _citaRepository.ObtenerPorPacienteAsync(pacienteId);
         
-        var ahora = DateTime.Now;
+        var ahora = DateTime.UtcNow;
         var response = citas.Select(c => 
         {
             var estadoReal = c.Estado;

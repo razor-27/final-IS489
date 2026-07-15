@@ -24,8 +24,8 @@ public class CitaRepository : ICitaRepository
     /// </summary>
     public async Task<IEnumerable<Cita>> ObtenerPorMedicoYFechaAsync(int medicoId, DateOnly fecha)
     {
-        var inicio = fecha.ToDateTime(TimeOnly.MinValue);
-        var fin = fecha.ToDateTime(TimeOnly.MaxValue);
+        var inicio = WariSalud.Core.Utils.TimeHelper.ToUtc(fecha.ToDateTime(TimeOnly.MinValue));
+        var fin = WariSalud.Core.Utils.TimeHelper.ToUtc(fecha.ToDateTime(TimeOnly.MaxValue));
 
         return await _context.Citas
             .AsNoTracking()
@@ -41,8 +41,8 @@ public class CitaRepository : ICitaRepository
     /// </summary>
     public async Task<IEnumerable<Cita>> ObtenerPorPacienteYFechaAsync(int pacienteId, DateOnly fecha)
     {
-        var inicio = fecha.ToDateTime(TimeOnly.MinValue);
-        var fin = fecha.ToDateTime(TimeOnly.MaxValue);
+        var inicio = WariSalud.Core.Utils.TimeHelper.ToUtc(fecha.ToDateTime(TimeOnly.MinValue));
+        var fin = WariSalud.Core.Utils.TimeHelper.ToUtc(fecha.ToDateTime(TimeOnly.MaxValue));
 
         return await _context.Citas
             .AsNoTracking()

@@ -55,9 +55,12 @@ public class CitaService : ICitaService
         var citasDelMedico = await _citaRepository.ObtenerPorMedicoYFechaAsync(
             request.MedicoId, DateOnly.FromDateTime(request.FechaHora));
 
+        var utcInicio = WariSalud.Core.Utils.TimeHelper.ToUtc(request.FechaHora);
+        var utcFin = WariSalud.Core.Utils.TimeHelper.ToUtc(fechaHoraFin);
+
         foreach (var citaExistente in citasDelMedico.Where(c => c.EstaActiva))
         {
-            if (citaExistente.SeSolapa(request.FechaHora, fechaHoraFin))
+            if (citaExistente.SeSolapa(utcInicio, utcFin))
                 throw new DoubleBookingException();
         }
 
@@ -74,7 +77,7 @@ public class CitaService : ICitaService
         {
             PacienteId = request.PacienteId,
             MedicoId = request.MedicoId,
-            FechaHora = request.FechaHora,
+            FechaHora = WariSalud.Core.Utils.TimeHelper.ToUtc(request.FechaHora),
             DuracionMinutos = duracionMinutos,
             Estado = EstadoCita.Pendiente,
             Motivo = request.Motivo
@@ -144,7 +147,9 @@ public class CitaService : ICitaService
             var finBloque = inicioBusqueda.AddMinutes(duracionMinutos);
 
             // El bloque está libre si no se solapa con ninguna cita existente
-            var haySolapamiento = citasExistentes.Any(c => c.SeSolapa(inicioBusqueda, finBloque));
+            var utcInicio = WariSalud.Core.Utils.TimeHelper.ToUtc(inicioBusqueda);
+            var utcFin = WariSalud.Core.Utils.TimeHelper.ToUtc(finBloque);
+            var haySolapamiento = citasExistentes.Any(c => c.SeSolapa(utcInicio, utcFin));
             if (!haySolapamiento)
                 bloques.Add(new BloqueDisponible(inicioBusqueda, finBloque));
 

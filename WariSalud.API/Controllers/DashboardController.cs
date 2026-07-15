@@ -21,11 +21,14 @@ public class DashboardController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStats()
     {
-        var hoy = DateTime.Today;
-        var mañana = hoy.AddDays(1);
+        var peruHoy = WariSalud.Core.Utils.TimeHelper.GetPeruTime().Date;
+        var peruMañana = peruHoy.AddDays(1);
+
+        var utcHoy = WariSalud.Core.Utils.TimeHelper.ToUtc(peruHoy);
+        var utcMañana = WariSalud.Core.Utils.TimeHelper.ToUtc(peruMañana);
 
         var citasHoy = await _context.Citas
-            .Where(c => c.FechaHora >= hoy && c.FechaHora < mañana)
+            .Where(c => c.FechaHora >= utcHoy && c.FechaHora < utcMañana)
             .CountAsync();
 
         var pacientes = await _context.Pacientes.CountAsync();

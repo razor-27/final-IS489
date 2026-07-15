@@ -13,7 +13,7 @@
 |---|---|
 | Lenguaje | C# 12 |
 | Framework | ASP.NET Core 8 Web API |
-| Base de datos | SQL Server |
+| Base de datos | PostgreSQL |
 | ORM | Entity Framework Core (Code-First) |
 | Seguridad | ASP.NET Core Identity + JWT Bearer Authentication |
 | Testing | xUnit + FluentAssertions + Moq |
