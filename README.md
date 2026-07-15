@@ -2,8 +2,8 @@
 
 ![Andean Heritage Health Design](https://img.shields.io/badge/Estilo-Andean%20Heritage%20Health-8B4513?style=for-the-badge)
 ![.NET 10 Web API](https://img.shields.io/badge/.NET%2010-Web%20API-512BD4?style=for-the-badge&logo=dotnet)
-![React 18 TypeScript](https://img.shields.io/badge/React%2018-TypeScript-61DAFB?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/Vite-Build%20Tool-646CFF?style=for-the-badge&logo=vite)
+![React 19 TypeScript](https://img.shields.io/badge/React%2019-TypeScript-61DAFB?style=for-the-badge&logo=react)
+![Vite 8](https://img.shields.io/badge/Vite%208-Build%20Tool-646CFF?style=for-the-badge&logo=vite)
 
 **WariSalud** es una plataforma web moderna y segura para la gestión clínica y agendamiento de citas médicas. Está diseñada bajo los principios de **Arquitectura Limpia (Clean Architecture)** en el backend y una interfaz moderna y altamente responsiva en el frontend inspirada en la paleta estética **Andean Heritage Health** (tonos tierra virreinal, terracota, esmeralda andina y glassmorphism).
 
@@ -14,14 +14,14 @@
 ### 🔹 Backend (.NET 10 / ASP.NET Core Web API)
 * **Framework Core**: .NET 10 (C# 13) con ASP.NET Core Web API.
 * **Arquitectura**: Clean Architecture con separación estricta en capas (`Core`, `Infrastructure`, `API`, `Tests`).
-* **Base de Datos & ORM**: Entity Framework Core con proveedor `InMemory` (para desarrollo, pruebas y ejecución instantánea sin dependencias externas). Compatible con SQL Server y SQLite.
+* **Base de Datos & ORM**: Entity Framework Core con proveedor **PostgreSQL** (`Npgsql`) para producción y desarrollo, incluyendo migraciones automáticas.
 * **Seguridad & Autenticación**:
   * Autenticación basada en **JSON Web Tokens (JWT)** con claims por rol (`Admin`, `Medico`, `Paciente`).
   * Encriptación criptográfica de contraseñas mediante **PBKDF2 (SHA-256)** con sal aleatoria de 16 bytes y 100,000 iteraciones.
 * **Documentación API**: OpenAPI / Swagger UI integrado para exploración interactiva de endpoints.
 
-### 🔹 Frontend (React 18 + TypeScript + Vite)
-* **Core & Enrutamiento**: React 18, TypeScript y React Router DOM v6 con protección de rutas por roles (`ProtectedRoute`).
+### 🔹 Frontend (React 19 + TypeScript + Vite 8)
+* **Core & Enrutamiento**: React 19, TypeScript y React Router DOM v7 con protección de rutas por roles (`ProtectedRoute`).
 * **Gestión de Estado & API**: TanStack Query (React Query) v5 para caché de datos, sincronización en tiempo real e invalidación inteligente, junto con `axios` e interceptores JWT.
 * **Formularios & Validación**: React Hook Form combinado con **Zod** para validación estricta de esquemas de entrada.
 * **Iconografía & UI**: Lucide React.
@@ -124,7 +124,7 @@ WariSalud/
 ├── WariSalud.API/                   # Capa de Presentación (Controladores REST, DTOs, Autenticación JWT, Swagger)
 ├── WariSalud.Tests/                 # Pruebas Unitarias y de Integración
 ├── WariSalud.slnx                   # Archivo de Solución de .NET
-└── warisalud-frontend/              # Aplicación Web Frontend (React 18 + TypeScript + Vite)
+└── warisalud-frontend/              # Aplicación Web Frontend (React 19 + TypeScript + Vite 8)
     ├── src/
     │   ├── components/              # Componentes UI reutilizables y layout de la aplicación
     │   ├── context/                 # Contextos de React (AuthContext, ToastContext)
