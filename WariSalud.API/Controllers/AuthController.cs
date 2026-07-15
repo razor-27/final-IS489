@@ -56,7 +56,7 @@ public class AuthController : ControllerBase
         _context.Pacientes.Add(paciente);
         await _context.SaveChangesAsync();
 
-        var token = GenerarToken(usuario);
+        var token = GenerarToken(usuario, request.NombreCompleto);
         return CreatedAtAction(nameof(Register), new AuthResponse(token, usuario.Email, usuario.Rol, usuario.Id));
     }
 
@@ -70,13 +70,29 @@ public class AuthController : ControllerBase
         if (usuario is null || !VerifyPassword(request.Password, usuario.PasswordHash))
             return Unauthorized(new { error = "Credenciales incorrectas." });
 
-        var token = GenerarToken(usuario);
+        string nombre = "Usuario";
+        if (usuario.Rol == "Paciente")
+        {
+            var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.UsuarioId == usuario.Id);
+            if (paciente != null) nombre = paciente.NombreCompleto;
+        }
+        else if (usuario.Rol == "Medico")
+        {
+            var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.UsuarioId == usuario.Id);
+            if (medico != null) nombre = medico.NombreCompleto;
+        }
+        else if (usuario.Rol == "Admin")
+        {
+            nombre = "Admin";
+        }
+
+        var token = GenerarToken(usuario, nombre);
         return Ok(new AuthResponse(token, usuario.Email, usuario.Rol, usuario.Id));
     }
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
 
-    private string GenerarToken(Usuario usuario)
+    private string GenerarToken(Usuario usuario, string nombre)
     {
         var jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key no configurada.");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
@@ -90,6 +106,7 @@ public class AuthController : ControllerBase
             new Claim("rol", usuario.Rol),
             new Claim(ClaimTypes.Email, usuario.Email),
             new Claim("email", usuario.Email),
+            new Claim("nombre", nombre),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

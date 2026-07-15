@@ -70,20 +70,30 @@ public class CitasController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Lista las citas del paciente autenticado.</summary>
     [HttpGet("mias")]
     [ProducesResponseType(typeof(IEnumerable<CitaResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> MisCitas()
     {
         var pacienteId = await ObtenerPacienteIdDelTokenAsync();
         var citas = await _citaRepository.ObtenerPorPacienteAsync(pacienteId);
-        var response = citas.Select(c => new CitaResponse(
-            c.Id, c.PacienteId, c.MedicoId,
-            c.FechaHora, c.DuracionMinutos, c.Estado, c.Motivo,
-            c.Medico is null ? null : new MedicoResponse(
-                c.Medico.Id, c.Medico.NombreCompleto, c.Medico.NumeroColegiatura, c.Medico.Activo,
-                c.Medico.Especialidad is null ? null : new EspecialidadResponse(
-                    c.Medico.Especialidad.Id, c.Medico.Especialidad.Nombre, c.Medico.Especialidad.Descripcion, c.Medico.Especialidad.DuracionCitaMinutos))));
+        
+        var ahora = DateTime.Now;
+        var response = citas.Select(c => 
+        {
+            var estadoReal = c.Estado;
+            if (estadoReal == WariSalud.Core.Entities.EstadoCita.Pendiente && c.FechaHora.AddMinutes(c.DuracionMinutos) < ahora)
+            {
+                estadoReal = WariSalud.Core.Entities.EstadoCita.Completada;
+            }
+
+            return new CitaResponse(
+                c.Id, c.PacienteId, c.MedicoId,
+                c.FechaHora, c.DuracionMinutos, estadoReal, c.Motivo,
+                c.Medico is null ? null : new MedicoResponse(
+                    c.Medico.Id, c.Medico.NombreCompleto, c.Medico.NumeroColegiatura, c.Medico.Activo,
+                    c.Medico.Especialidad is null ? null : new EspecialidadResponse(
+                        c.Medico.Especialidad.Id, c.Medico.Especialidad.Nombre, c.Medico.Especialidad.Descripcion, c.Medico.Especialidad.DuracionCitaMinutos)));
+        });
         return Ok(response);
     }
 

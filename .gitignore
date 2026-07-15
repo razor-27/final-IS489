@@ -1,4 +1,4 @@
-# Visual Studio / .NET
+# ── .NET / Visual Studio ──────────────────────────────────────────────────────
 [Bb]in/
 [Oo]bj/
 .vs/
@@ -12,23 +12,37 @@
 *.cache
 *.swp
 
-# Unused / old template folders
-WariSalud/
-coverage-report/
-TestResults/
+# ── SECRETOS — NUNCA subir al repositorio ─────────────────────────────────────
+# Estos archivos contienen conexiones, claves JWT y contraseñas
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+# El appsettings.json base SÍ se sube, pero sin secretos reales
+# Los secretos se configuran como variables de entorno en Render
 
-# Node / Vite (covered also by warisalud-frontend/.gitignore)
+# .NET User Secrets
+secrets.json
+
+# ── Node / Vite ───────────────────────────────────────────────────────────────
 node_modules/
 dist/
 dist-ssr/
 *.local
+.env
 .env.local
 .env.*.local
+.env.development
+.env.production
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# OS
+# ── Unused / old folders ──────────────────────────────────────────────────────
+WariSalud/
+coverage-report/
+TestResults/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db

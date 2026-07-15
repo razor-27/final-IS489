@@ -109,7 +109,15 @@ public class MedicosController : ControllerBase
             Activo = true
         };
         var creado = await _medicoRepository.AgregarAsync(medico);
-        return CreatedAtAction(nameof(ObtenerTodos), new { id = creado.Id }, creado);
+        
+        var response = new MedicoResponse(
+            creado.Id,
+            creado.NombreCompleto,
+            creado.NumeroColegiatura,
+            creado.Activo,
+            null);
+
+        return StatusCode(201, response);
     }
 
     [HttpPut("{id}")]
@@ -122,7 +130,16 @@ public class MedicosController : ControllerBase
         m.NumeroColegiatura = request.NumeroColegiatura;
         m.EspecialidadId = request.EspecialidadId;
         await _medicoRepository.ActualizarAsync(m);
-        return Ok(m);
+        
+        var response = new MedicoResponse(
+            m.Id,
+            m.NombreCompleto,
+            m.NumeroColegiatura,
+            m.Activo,
+            m.Especialidad is null ? null : new EspecialidadResponse(
+                m.Especialidad.Id, m.Especialidad.Nombre, m.Especialidad.Descripcion, m.Especialidad.DuracionCitaMinutos));
+
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

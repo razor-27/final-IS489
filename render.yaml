@@ -1,0 +1,40 @@
+services:
+  # ── Backend (.NET API) ────────────────────────────────────────────────────────
+  - type: web
+    name: warisalud-api
+    runtime: dotnet
+    region: oregon
+    branch: main
+    rootDir: .
+    buildCommand: dotnet publish WariSalud.API/WariSalud.API.csproj -c Release -o ./publish
+    startCommand: dotnet ./publish/WariSalud.API.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        sync: false   # ← Ingresar en el dashboard de Render (no commitear)
+      - key: Jwt__Key
+        sync: false   # ← Ingresar en el dashboard de Render (no commitear)
+      - key: Jwt__Issuer
+        value: WariSalud.API
+      - key: Jwt__Audience
+        value: WariSalud.Clients
+      - key: AllowedOrigins
+        sync: false   # ← URL del frontend en Render, ej: https://warisalud.onrender.com
+
+  # ── Frontend (Vite + React) ───────────────────────────────────────────────────
+  - type: web
+    name: warisalud-frontend
+    runtime: static
+    region: oregon
+    branch: main
+    rootDir: warisalud-frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html   # SPA fallback para React Router
+    envVars:
+      - key: VITE_API_URL
+        sync: false   # ← URL del backend en Render, ej: https://warisalud-api.onrender.com

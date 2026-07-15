@@ -15,6 +15,11 @@ export default function DashboardPage() {
     queryFn: async () => (await api.get<Especialidad[]>('/api/especialidades')).data,
   });
 
+  const { data: stats } = useQuery({
+    queryKey: ['admin-stats'],
+    queryFn: async () => (await api.get<{ citasHoy: number; pacientes: number }>('/api/admin/dashboard/stats')).data,
+  });
+
   return (
     <AppLayout>
       <div>
@@ -44,12 +49,12 @@ export default function DashboardPage() {
           </div>
           <div className="stat-card">
             <div className="stat-card-icon"><Calendar size={22} /></div>
-            <div className="stat-value">&mdash;</div>
+            <div className="stat-value">{stats !== undefined ? stats.citasHoy : <span style={{opacity: 0.5}}>&mdash;</span>}</div>
             <div className="stat-label">Citas hoy</div>
           </div>
           <div className="stat-card">
             <div className="stat-card-icon"><Users size={22} /></div>
-            <div className="stat-value">&mdash;</div>
+            <div className="stat-value">{stats !== undefined ? stats.pacientes : <span style={{opacity: 0.5}}>&mdash;</span>}</div>
             <div className="stat-label">Pacientes</div>
           </div>
         </div>
