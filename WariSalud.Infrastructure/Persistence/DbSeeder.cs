@@ -107,7 +107,7 @@ public static class DbSeeder
                 var pac3 = pacientes[2];
                 var pac4 = pacientes.Count > 3 ? pacientes[3] : pacientes[0];
 
-                var hoy = DateTime.Today;
+                var hoy = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc);
 
                 // Citas pasadas
                 context.Citas.AddRange(
