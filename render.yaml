@@ -2,12 +2,10 @@ services:
   # ── Backend (.NET API) ────────────────────────────────────────────────────────
   - type: web
     name: warisalud-api
-    runtime: dotnet
+    env: docker
     region: oregon
     branch: main
     rootDir: .
-    buildCommand: dotnet publish WariSalud.API/WariSalud.API.csproj -c Release -o ./publish
-    startCommand: dotnet ./publish/WariSalud.API.dll
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
@@ -29,7 +27,7 @@ services:
     region: oregon
     branch: main
     rootDir: warisalud-frontend
-    buildCommand: npm ci && npm run build
+    buildCommand: npm install --include=dev && npm run build
     staticPublishPath: dist
     routes:
       - type: rewrite

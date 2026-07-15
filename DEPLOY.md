@@ -24,8 +24,8 @@
 
 1. Crea un **Web Service** en [render.com](https://render.com) y conecta tu repo.
 2. Configuracion del servicio:
-   - **Build Command:** `dotnet publish WariSalud.API/WariSalud.API.csproj -c Release -o ./publish`
-   - **Start Command:** `dotnet ./publish/WariSalud.API.dll`
+   - Render detectará el `Dockerfile` en la raíz (o tomará la configuración de `render.yaml`) y usará el entorno **Docker**.
+   - No necesitas configurar Build Command ni Start Command manualmente.
 3. **Variables de entorno** (Environment -> Add Environment Variable):
 
 | Variable | Valor |
@@ -44,7 +44,7 @@
 1. Crea un **Static Site** en Render con el mismo repo.
 2. Configuracion:
    - **Root Directory:** `warisalud-frontend`
-   - **Build Command:** `npm ci && npm run build`
+   - **Build Command:** `npm install --include=dev && npm run build`
    - **Publish Directory:** `dist`
 3. **Variables de entorno:**
 
